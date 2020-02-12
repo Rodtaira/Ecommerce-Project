@@ -7,11 +7,11 @@ exports.signup = (req, res) => {
    user.save((err, user) => {
        if(err){
            res.status(400).json({
-               error
+               err: errorHandler(err)
            }) 
        }
 
-        res.json({
+       res.json({
             user
         })
    })
