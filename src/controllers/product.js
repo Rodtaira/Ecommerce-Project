@@ -1,8 +1,10 @@
-const   formidable    =   require('formidable') 
-const   _             =   require('lodash')
-const   fs            =   require('fs') 
-const {errorHandler} = require('../helpers/dbErrorHandler')
-const   Product       =   require('../models/product')
+const   formidable      =   require('formidable') 
+const   _               =   require('lodash')
+const   fs              =   require('fs') 
+const   {errorHandler}  =   require('../helpers/dbErrorHandler')
+const   Product         =   require('../models/product')
+const   ifError         =   require('../utils/ifError')
+
 
 // Middlewares methods 
 
@@ -13,7 +15,6 @@ exports.productById = (req, res, next, id) => {
                 error: 'Product not found'
             })
         }
-
         req.product = product
         next()
     })
@@ -25,7 +26,6 @@ exports.productById = (req, res, next, id) => {
 
 exports.readProduct = (req, res) => {
     req.product.photo = undefined
-
     return res.json(req.product)
 } 
 
@@ -35,9 +35,7 @@ exports.delProduct = (req, res) => {
     let product = req.product
     product.remove((err) => {
         if(err){
-            return res.status(400).json({
-                error: errorHandler(error)
-            })
+            return ifError(err, res)
         }
         res.json({
             "message": "Product deleted succesfully"
@@ -48,7 +46,6 @@ exports.delProduct = (req, res) => {
 // Update a product 
 
 exports.updateProduct = (req, res) => {
-
     let form = new formidable.IncomingForm()
     form.keepExtensions = true
     form.parse(req, (err, updated_fields, files) => {
@@ -57,7 +54,6 @@ exports.updateProduct = (req, res) => {
                 error: 'Image could not be uploaded'
             })
         }
-
         // check for all fields 
         const {name, description, price, category, quantity, shipping} = updated_fields
         
