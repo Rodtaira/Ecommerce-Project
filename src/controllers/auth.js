@@ -1,9 +1,14 @@
-const User          =   require('../models/user')
-const jwt           =   require('jsonwebtoken')
-const expressJwt    =   require('express-jwt')
-const {errorHandler} = require('../helpers/dbErrorHandler')
+const User              =   require('../models/user')
+const jwt               =   require('jsonwebtoken')
+const expressJwt        =   require('express-jwt')
+const {errorHandler}    =   require('../helpers/dbErrorHandler')
+
+/**
+ * Represents a method to Sign Up a new User.
+*/
 
 exports.signup = (req, res) => {
+
    const user = new User(req.body)
 
    user.save((err, user) => {
@@ -12,15 +17,18 @@ exports.signup = (req, res) => {
                err: errorHandler(err)
            }) 
        }
-
-       res.json({
-            user
-        })
+       res.json({user})
    })
 }
 
+/**
+ * Represents a method Sign In using JWT 
+ */
+
 exports.signin = (req, res) => {
+
     // find the user based on email
+
     const { email, password } = req.body;
     User.findOne({ email }, (err, user) => {
         if (err || !user) {
@@ -35,6 +43,7 @@ exports.signin = (req, res) => {
                 error: 'Email and password dont match'
             })
         }
+
         // generate a signed token with user id and secret
         const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET)
         // persist the token as 't' in cookie with expiry date
@@ -45,10 +54,16 @@ exports.signin = (req, res) => {
     })
 }
 
+/**
+ * Represents a Method a Sign Out 
+ */
+
 exports.signout = (req, res) => {
     res.clearCookie('t');
     res.json({ message: 'Signout success' });
 }
+
+// Middlewares 
 
 exports.requireSignin = expressJwt({
     secret: process.env.JWT_SECRET, 

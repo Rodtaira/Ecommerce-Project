@@ -20,6 +20,13 @@ const productSchema = new mongoose.Schema(
             required: true, 
             maxlength: 32
         }, 
+        brand: {
+            type: String, 
+            maxlength: 20
+        },
+        format:{
+            type: String, 
+        },
         category:{
             type: ObjectId,
             ref: 'Category',
@@ -28,6 +35,10 @@ const productSchema = new mongoose.Schema(
         quantity:{
             type: Number
         }, 
+        sold:{
+            type: Number, 
+            default: 0
+        },
         photo:{
             data: Buffer, 
             contentType: String
