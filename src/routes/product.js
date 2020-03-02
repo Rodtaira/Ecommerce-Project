@@ -2,7 +2,7 @@ const express   =   require('express')
 const router    =   express.Router()
 const{requireSignin, isAuth, isAdmin} = require('../controllers/auth')
 const {userById} = require('../controllers/user')
-const{createProduct, productById, readProduct, delProduct, updateProduct, listProducts} = require('../controllers/product')
+const{createProduct, productById, readProduct, delProduct, updateProduct, listProducts, listRelatedProd, listCategories, listBySearch, productPhoto} = require('../controllers/product')
 
 
 //-------------------------- CRUD Methods -------------------------- 
@@ -13,6 +13,10 @@ router.put('/product/:productId/:userId', requireSignin, isAuth, isAdmin, update
 //------------------------------------------------------------------
 
 router.get('/products', listProducts)
+router.get('/products/related/:productId', listRelatedProd )
+router.get('/products/categories', listCategories )
+router.post('/products/by/search', listBySearch);
+router.get('/product/photo/:productId', productPhoto)
 
 // ---------------------- Middlewares Methods ----------------------
 

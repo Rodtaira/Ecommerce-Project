@@ -7,6 +7,7 @@ const server    =   require('../app')
 chai.use(chaiHttp)
 
 describe('Sign Up new User', () => {
+    
     let user = { 
         "name": "Rodrigo",
         "email": "rodtaira@gmail.com",
@@ -14,8 +15,8 @@ describe('Sign Up new User', () => {
     }
 
     it('It should register a new user', (done) => {
-        chai.request(server)
-            .post('/api/signup')
+        chai.request('http://localhost:8000/api')
+            .post('/signup')
             .send(user)
             .end((err, res) => {
                 // res.should.have.status(201);
