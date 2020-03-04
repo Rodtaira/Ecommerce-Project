@@ -4,4 +4,4 @@ const App = () =>
   <div> Jorge POPO </div>
 
 
-export default App;
+export default App
